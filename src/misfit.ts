@@ -16,7 +16,8 @@ export class Misfit{
     static get height(){return this.canvas.height;}
     static get context(){return this._context;}
     private static keys: Map<string, [boolean, boolean]>;
-    private static _loopFn: (dt: number)=>void;
+    private static loopFn: (dt: number)=>void;
+    static lastTimeStamp: number = 0;
     static nullCheck<T>(val: T | null, errorMessage: string){
         if(val === null) throw errorMessage;
         return val;
@@ -29,6 +30,42 @@ export class Misfit{
         this._context = this.nullCheck(this.canvas.getContext('2d'), 'Could not create 2d context.');
         root.appendChild(this.canvas);
         this.keys = new Map();
+        document.addEventListener('keydown', e => this.setKey(e.key, true));
+        document.addEventListener('keyup', e => this.setKey(e.key, false));
+        window.requestAnimationFrame(ts => this.loop(ts));
+        this.loopFn = (_) => {};
     }
-    private static loop(){}
+    static getKeyState(key: string){
+        return this.keys.get(key) ?? [false, false];
+    }
+    static getKeyDown(key: string){
+        return this.getKeyState(key)[0];
+    }
+    static getKeyPressed(key: string){
+        const [current, last] = this.getKeyState(key);
+        return current && !last;
+    }
+    static getKeyReleased(key: string){
+        const [current, last] = this.getKeyState(key);
+        return !current && last;
+    }
+    private static setKey(key: string, val: boolean){
+        this.getKeyState(key)[0] = val;
+    }
+    private static loop(timeStamp: number){
+        if(this.lastTimeStamp > 0){
+            const dt = timeStamp - this.lastTimeStamp;
+            this.loopFn(dt / 1000);
+        }
+        this.lastTimeStamp = timeStamp;
+        window.requestAnimationFrame(ts => this.loop(ts));
+    }
+    static loadImage(path: string): Promise<CanvasImageSource>{
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.addEventListener('load', () => resolve(img));
+            img.addEventListener('error', (err) => reject(err));
+            img.src = path;
+        });
+    }
 }
