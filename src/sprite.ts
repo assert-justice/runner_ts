@@ -9,6 +9,8 @@ export class Sprite{
     sy: number;
     sw: number;
     sh: number;
+    hFlip = false;
+    vFlip = false;
     constructor(context: CanvasRenderingContext2D,
         image: CanvasImageSource,
         width: number,
@@ -27,8 +29,12 @@ export class Sprite{
             this.sh = sh ?? height;
         }
     draw(pos: Vector2){
+        this.context.save();
+        const cx = this.hFlip ? -1:1;
+        const cy = this.vFlip ? -1:1;
+        this.context.scale(cx, cy);
         this.context.drawImage(this.image, 
-            this.sx, this.sy, this.sw, this.sh, pos.x, pos.y, 
-            this.width, this.height);
+            this.sx, this.sy, this.sw, this.sh, cx * pos.x, cy * pos.y, this.width * cx, this.height * cy);
+        this.context.restore();
     }
 }

@@ -16,7 +16,7 @@ export class Misfit{
     static get height(){return this.canvas.height;}
     static get context(){return this._context;}
     private static keys: Map<string, [boolean, boolean]>;
-    private static loopFn: (dt: number)=>void;
+    static loopFn: (dt: number)=>void;
     static lastTimeStamp: number = 0;
     static nullCheck<T>(val: T | null, errorMessage: string){
         if(val === null) throw errorMessage;
@@ -34,9 +34,16 @@ export class Misfit{
         document.addEventListener('keyup', e => this.setKey(e.key, false));
         window.requestAnimationFrame(ts => this.loop(ts));
         this.loopFn = (_) => {};
+        this.context.imageSmoothingEnabled = false;
+        this.context.fillStyle = 'black';
     }
     static getKeyState(key: string){
-        return this.keys.get(key) ?? [false, false];
+        let state = this.keys.get(key);
+        if(state === undefined){
+            state = [false, false];
+            this.keys.set(key, state);
+        }
+        return state;
     }
     static getKeyDown(key: string){
         return this.getKeyState(key)[0];
@@ -53,9 +60,13 @@ export class Misfit{
         this.getKeyState(key)[0] = val;
     }
     private static loop(timeStamp: number){
+        this.context.fillRect(0, 0, this.width, this.height);
         if(this.lastTimeStamp > 0){
             const dt = timeStamp - this.lastTimeStamp;
             this.loopFn(dt / 1000);
+        }
+        for (const state of this.keys.values()) {
+            state[1] = state[0];
         }
         this.lastTimeStamp = timeStamp;
         window.requestAnimationFrame(ts => this.loop(ts));
