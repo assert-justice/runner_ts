@@ -9,9 +9,9 @@ export class Player extends Entity{
     speed = 600;
     jumpPower = 25;
     gravity = 1;
-    constructor(sprite: Sprite){
+    constructor(image: CanvasImageSource){
         super();
-        this.sprite = sprite;
+        this.sprite = new Sprite(Misfit.context, image, 32, 32, 0, 0, 16, 16);
         this.velocity = new Vector2();
     }
     update(dt: number): void {
