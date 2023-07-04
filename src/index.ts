@@ -1,19 +1,5 @@
-// import { Vector2 } from "./la";
+import { Game } from "./game";
 import { Misfit } from "./misfit";
-import { Player } from "./player";
-// import { Sprite } from "./sprite";
-
-class Game{
-    player: Player;
-    constructor(images: CanvasImageSource[]){
-        const [playerImg, itemsImg] = images;
-        this.player = new Player(playerImg);
-    }
-    update(dt: number){
-        this.player.update(dt);
-        this.player.draw();
-    }
-}
 
 async function main(){
     Misfit.init(document.getElementById('root'), 640, 640);
