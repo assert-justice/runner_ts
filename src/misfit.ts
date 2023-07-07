@@ -36,6 +36,7 @@ export class Misfit{
         this.loopFn = (_) => {};
         this.context.imageSmoothingEnabled = false;
         this.context.fillStyle = 'black';
+        Misfit.context.textBaseline='top';
     }
     static getKeyState(key: string){
         let state = this.keys.get(key);
@@ -60,6 +61,7 @@ export class Misfit{
         this.getKeyState(key)[0] = val;
     }
     private static loop(timeStamp: number){
+        const style = this.context.fillStyle;
         this.context.fillRect(0, 0, this.width, this.height);
         if(this.lastTimeStamp > 0){
             const dt = timeStamp - this.lastTimeStamp;
@@ -70,6 +72,7 @@ export class Misfit{
         }
         this.lastTimeStamp = timeStamp;
         window.requestAnimationFrame(ts => this.loop(ts));
+        this.context.fillStyle=style;
     }
     static loadImage(path: string): Promise<CanvasImageSource>{
         return new Promise((resolve, reject) => {

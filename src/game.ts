@@ -1,12 +1,14 @@
 import { Fire } from "./fire";
 import { Misfit } from "./misfit";
 import { Player } from "./player";
+import { TextRenderer } from "./text_renderer";
 
 export class Game{
     player: Player;
     flames: Fire[];
     itemsImg: CanvasImageSource;
     time = 0;
+    text: TextRenderer;
     constructor(images: CanvasImageSource[]){
         const [playerImg, itemsImg] = images;
         this.itemsImg = itemsImg;
@@ -16,6 +18,7 @@ export class Game{
         fire.position.x = Misfit.width * 0.8;
         fire.position.y = Misfit.height * 0.8;
         this.flames.push(fire);
+        this.text = new TextRenderer('0');
     }
     update(dt: number){
         this.player.update(dt);
@@ -24,5 +27,8 @@ export class Game{
             flame.update(dt);
             flame.draw();
         }
+        this.time+=dt;
+        this.text.text = 'Score: ' + this.time.toFixed(2);
+        this.text.draw();
     }
 }
