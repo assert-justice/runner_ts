@@ -1,7 +1,7 @@
-import { Entity } from "./entity";
-import { Vector2 } from "./la";
-import { Misfit } from "./misfit";
-import { Sprite } from "./sprite";
+import { Entity } from "./misfit/entity";
+import { Vector2 } from "./misfit/la";
+import { Misfit } from "./misfit/misfit";
+import { Sprite } from "./misfit/sprite";
 
 export class Fire extends Entity{
     sprite: Sprite;

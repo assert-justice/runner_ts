@@ -1,5 +1,5 @@
 import { Game } from "./game";
-import { Misfit } from "./misfit";
+import { Misfit } from "./misfit/misfit";
 
 async function main(){
     Misfit.init(document.getElementById('root'), 640, 640);

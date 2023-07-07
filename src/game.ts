@@ -1,7 +1,7 @@
 import { Fire } from "./fire";
-import { Misfit } from "./misfit";
+import { Misfit } from "./misfit/misfit";
 import { Player } from "./player";
-import { TextRenderer } from "./text_renderer";
+import { TextRenderer } from "./misfit/text_renderer";
 
 export class Game{
     player: Player;
